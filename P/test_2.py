@@ -42,3 +42,29 @@ def do_operation(owner: Signer, calculator: Calculator, op: Operation, num: i64)
     calculator.display *= num
   elif op == Operation.DIV:
     calculator.display /= num
+
+@instruction
+def use_token_mint(
+  mint: TokenMint,
+  recipient: TokenAccount,
+  signer: Signer,
+  recipient_signer: Signer
+):
+  # Mint 100 tokens from our `mint` to `recipient`.
+  # `signer` must be the authority (owner) for `mint`.
+  # Note that the amounts here are in *native* token quantities - you need to
+  # account for decimals when you make calls to .mint().
+  mint.mint(
+    authority = signer,
+    to = recipient,
+    amount = 100
+  )
+  
+  # Burn 99 tokens from the `recipient` account (so after this instruction,
+  # `recipient` will gain exactly 1 token.)
+  # `recipient_signer` must be the authority for the `recipient` token account.
+  mint.burn(
+    authority = recipient_signer,
+    to = recipient,
+    amount = 99
+  )

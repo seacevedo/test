@@ -42,3 +42,18 @@ def do_operation(owner: Signer, calculator: Calculator, op: Operation, num: i64)
     calculator.display *= num
   elif op == Operation.DIV:
     calculator.display /= num
+
+@instruction
+def init_token_account(
+  new_token_account: Empty[TokenAccount],
+  mint: TokenMint
+):
+  # On top of the regular init args, you need to provide:
+  #   - the mint that this token account will hold tokens of
+  #   - the account that has authority over this account.
+  new_token_account.init(
+    payer = signer,
+    seeds = ['token-account', signer],
+    mint = mint,
+    authority = signer
+  )
